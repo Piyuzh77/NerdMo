@@ -1,0 +1,140 @@
+
+// TEXT FIELD COMPONENT IF GONE WRONG!
+import React, { useState } from "react";
+
+const Button = ({ clicked, startCounter}) => {
+  const [click, setClick] = useState(false);
+
+  const onClick = () => {
+    startCounter();
+    clicked();
+    setClick(true);
+    setTimeout(() => setClick(false), 100);
+  };
+
+  return (
+    <>
+      <div className="flex justify-center items-center">
+        <button
+          className={`px-4 py-2 rounded-md border border-gray-500 border-1.5 ${
+            click
+              ? "bg-slate-700 ring-blue-500 text-white"
+              : "bg-logo  text-white"
+          } hover:bg-primaryLightMode hover:text-white transition-colors duration-300 ease-in-out `}
+          onClick={onClick}
+        >
+          +
+        </button>
+      </div>
+    </>
+  );
+};
+
+const TimeSet = ({setTime}) => {
+  const [val, setVal] = useState({
+    hrs: '',
+    min: '',
+    sec: ''
+  });
+
+  const counter=()=>{
+    setTime(val.hrs*3600+val.min*60+val.sec)
+  }
+
+  const change = (e) => {
+    setVal({ ...val, [e.target.name]: e.target.value });
+    if (e.target.name !== 'hrs' && e.target.value > 59) {
+      alert("Minutes and Seconds can not exceed 59 units");
+      setVal({ ...val, [e.target.name]: '0' });
+    }
+  };
+
+  return (
+    <>
+      <input
+        onChange={change}
+        type="number"
+        value={val.hrs}
+        name='hrs'
+        className="px-2 py-2 w-14 h-10 border mr-1 border-gray-500 rounded-md placeholder-lightModeBlue hover:ring-2 hover:ring-slate-500"
+        placeholder="HR"
+        min="00"
+        max="23"
+        maxLength="2"
+        style={{ fontSize: '12px' }}
+      />
+      <input
+        onChange={change}
+        type="number"
+        value={val.min}
+        name='min'
+        className="px-2 py-2 w-14 h-10 border mr-1 border-gray-500 rounded-md placeholder-lightModeBlue hover:ring-2 hover:ring-slate-500"
+        placeholder="MM"
+        min="00"
+        max="59"
+        maxLength="2"
+        style={{ fontSize: '12px' }}
+      />
+      <input
+        onChange={change}
+        type="number"
+        value={val.sec}
+        name='sec'
+        className="px-2 py-2 w-14 h-10 border mr-1 border-gray-500 rounded-md placeholder-lightModeBlue hover:ring-2 hover:ring-slate-500"
+        placeholder="SS"
+        min="00"
+        max="59"
+        maxLength="2"
+        style={{ fontSize: '12px' }}
+      />
+    </>
+  );
+};
+
+const TextField = () => {
+  const [urls, setUrls] = useState([]);
+  const [val, setVal] = useState({
+    url: ''
+  });
+
+  const handleChange = (e) => {
+    setVal({ ...val, [e.target.name]: e.target.value });
+  };
+
+  const handleClick = () => {
+    if (val.url.trim() !== '') {
+      setUrls([...urls, val.url]); // Add the URL to the list
+      setVal({ url: '' }); // Reset input after adding value
+    }
+  };
+  const startCounter=()=>{
+    
+  }
+
+  return (
+    <>
+    <div >
+      <div className="flex justify-center m-3  " name="Containter">
+        <input
+          onChange={handleChange}
+          value={val.url}
+          name='url'
+          className="border border-gray-500 rounded-md px-4 py-2 w-64 h-10 mr-1  place-content-center hover:ring-2 hover:ring-slate-500 "
+          placeholder="Enter Url to Block"
+          style={{ fontSize: '12px' }}
+        />
+        <TimeSet />
+        <Button clicked={handleClick} />
+      </div>
+      <ul style={{ textAlign: 'center', padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {urls.map((url, index) => (
+      <li key={index} style={{ marginBottom: '0.5', width: '100%', listStyle:"inside" }}>{url}</li>
+    ))}
+  </ul>
+
+    </div>
+    </>
+  );
+};
+
+export default TextField;
